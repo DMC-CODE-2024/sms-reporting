@@ -9,10 +9,6 @@ import com.ceir.SmsCallbackProcess.repository.impl.SystemConfigurationDbRepoImpl
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.utils.URIBuilder;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -85,7 +81,7 @@ public class CallbackProcessor implements Runnable {
             URIBuilder uriBuilder = new URIBuilder(url);
             uriBuilder.setParameter("username", username);
             uriBuilder.setParameter("pass", password);
-            uriBuilder.setParameter("isj", 1);
+            uriBuilder.setParameter("isj", "1");
             uriBuilder.setParameter("sd", sd);
             uriBuilder.setParameter("ed", ed);
             URI uri = uriBuilder.build();
