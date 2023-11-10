@@ -68,14 +68,14 @@ public class CallbackProcessor implements Runnable {
                     }
                 }
             }
+            SystemConfigurationDb nextRunTime;
             if(lastRunTimeOp.isPresent()) {
-                SystemConfigurationDb nextRunTime = lastRunTimeOp.get();
+                nextRunTime = lastRunTimeOp.get();
                 nextRunTime.setValue(lastRunDate);
-                systemConfigRepoImpl.saveConfigDb(nextRunTime);
             } else {
-                SystemConfigurationDb nextRunTime = new SystemConfigurationDb("agg_report_last_run_time", lastRunDate);
-                systemConfigRepoImpl.saveConfigDb(nextRunTime);
+                nextRunTime = new SystemConfigurationDb("agg_report_last_run_time", lastRunDate);
             }
+            systemConfigRepoImpl.saveConfigDb(nextRunTime);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
