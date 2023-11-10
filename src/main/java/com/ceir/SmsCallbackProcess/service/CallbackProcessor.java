@@ -40,14 +40,14 @@ public class CallbackProcessor implements Runnable {
         String startDate;
         Optional<SystemConfigurationDb> lastRunTimeOp = Optional.ofNullable(systemConfigRepoImpl.getDataByTag("agg_report_last_run_time"));
         if(!lastRunTimeOp.isPresent()) {
-            lastRunDate = LocalDate.now().minusDays(1).format(formatter).toLowerCase();
-            startDate = LocalDate.now().format(formatter).toLowerCase();
+            startDate = LocalDate.now().minusDays(1).format(formatter).toLowerCase();
         } else {
-            lastRunDate = lastRunTimeOp.get().getValue();
-            LocalDate date = LocalDate.parse(lastRunDate, formatter);
-            LocalDate nextDate = date.plusDays(1);
-            startDate = nextDate.format(formatter).toLowerCase();
+            startDate = lastRunTimeOp.get().getValue();
         }
+//        LocalDate date = LocalDate.parse(startDate, formatter);
+//        LocalDate nextDate = date.plusDays(1);
+//        lastRunDate = nextDate.format(formatter).toLowerCase();
+        lastRunDate = LocalDate.now().format(formatter).toLowerCase();
         SystemConfigurationDb aggReportUrl = systemConfigRepoImpl.getDataByTag("agg_report_url");
         SystemConfigurationDb aggUsername = systemConfigRepoImpl.getDataByTag("agg_username");
         SystemConfigurationDb aggPassword = systemConfigRepoImpl.getDataByTag("agg_password");
@@ -67,6 +67,14 @@ public class CallbackProcessor implements Runnable {
                         notificationRepository.save(noti);
                     }
                 }
+            }
+            if(lastRunTimeOp.isPresent()) {
+                SystemConfigurationDb nextRunTime = lastRunTimeOp.get();
+                nextRunTime.setValue(lastRunDate);
+                systemConfigRepoImpl.saveConfigDb(nextRunTime);
+            } else {
+                SystemConfigurationDb nextRunTime = new SystemConfigurationDb("agg_report_last_run_time", lastRunDate);
+                systemConfigRepoImpl.saveConfigDb(nextRunTime);
             }
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
