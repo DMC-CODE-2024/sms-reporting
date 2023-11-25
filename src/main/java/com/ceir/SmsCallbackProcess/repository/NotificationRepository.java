@@ -8,5 +8,5 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
 	public Notification save(Notification notification);
 
-	Notification findByCorelationIdAndOperatorName(String correlationId, String operatorName);
+	Notification findByCorelationId(String correlationId);
 }
