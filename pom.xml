@@ -14,6 +14,13 @@
 	<name>SmsCallbackProcess</name>
 	<description>Processing Offline Callback Status</description>
 	<packaging>jar</packaging>
+	<repositories>
+		<repository>
+			<id>spring-milestone</id>
+			<name>Spring Milestone Repository</name>
+			<url>https://repo.spring.io/milestone</url>
+		</repository>
+	</repositories>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
