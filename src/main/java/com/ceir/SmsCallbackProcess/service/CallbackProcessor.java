@@ -49,6 +49,7 @@ public class CallbackProcessor implements Runnable {
         SystemConfigurationDb aggPassword = systemConfigRepoImpl.getDataByTag("agg_password");
         try {
             Map<String, String> idStatusMap = fetchDataFromAPI(aggReportUrl.getValue(), aggUsername.getValue(), aggPassword.getValue(), startDate, endDate);
+            log.info("Final CorrelationId-Status Map: "+idStatusMap);
             if (idStatusMap.size() > 0) {
                 for (Map.Entry<String, String> entry : idStatusMap.entrySet()) {
                     String key = entry.getKey();
@@ -61,6 +62,8 @@ public class CallbackProcessor implements Runnable {
                         DeliveryStatus status = DeliveryStatus.valueOf(value.toUpperCase().replace(" ", "_"));
                         noti.setDeliveryStatus(status.getValue());
                         notificationRepository.save(noti);
+                    } else {
+                        log.info("Notification not found for correlation id: "+key);
                     }
                 }
             }
@@ -89,8 +92,8 @@ public class CallbackProcessor implements Runnable {
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Final Request URL: " + uri.toString());
-            System.out.println("Response from the API: "+response.body());
+            log.info("Final Request URL: " + uri.toString());
+            log.info("Response from the API: "+response.body());
 
             if (response.body() != null && !response.body().isEmpty()) {
                 // Parse the JSON response
